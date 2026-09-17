@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GovConnect AI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="ambient ambient-one"></div>
+<div class="ambient ambient-two"></div>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">🇮🇳</div>
+      <div><strong>GovConnect</strong><span>AI Citizen Assistant</span></div>
+    </div>
+
+    <div class="side-title">DEPARTMENTS</div>
+    <div class="department-list" id="departmentList">
+      {% for name, item in departments.items() %}
+      <button class="department {% if loop.first %}active{% endif %}"
+              data-name="{{ name }}" onclick="selectDepartment(this)">
+        <span class="dept-icon">{{ item.icon }}</span>
+        <span class="dept-name">{{ name }}</span>
+        <span class="arrow">›</span>
+      </button>
+      {% endfor %}
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="live-dot"><i></i> Information center online</div>
+      <small>Citizen information prototype<br>Not an official government website</small>
+    </div>
+  </aside>
+
+  <main class="chat-area">
+    <header class="chat-header">
+      <div class="mobile-brand">🇮🇳 GovConnect AI</div>
+      <div class="header-dept">
+        <div id="headerIcon">🎓</div>
+        <div><span>SELECTED DEPARTMENT</span><strong id="headerDept">Education</strong></div>
+      </div>
+      <div class="header-actions">
+        <button onclick="showUpdates()">📰 Updates</button>
+        <button onclick="openAbout()">ⓘ</button>
+      </div>
+    </header>
+
+    <section class="department-banner">
+      <div>
+        <div class="mini-label">DEPARTMENT INFORMATION</div>
+        <h1 id="deptTitle">Education</h1>
+        <p id="deptDescription">Education services, scholarships, student support, admissions and education-related government information.</p>
+        <div id="topicChips" class="chips"></div>
+      </div>
+      <div class="banner-art">◈</div>
+    </section>
+
+    <section class="messages" id="messages">
+      <div class="message ai">
+        <div class="avatar">🤖</div>
+        <div class="bubble">
+          <div class="message-name">GovConnect AI</div>
+          <p>Vanakkam! 👋 I'm your citizen-information assistant.</p>
+          <p>Choose a department on the left and ask about schemes, services, scholarships, loans, agriculture or other government information.</p>
+          <div class="suggestions">
+            <button onclick="quickAsk('What services are available in this department?')">Services</button>
+            <button onclick="quickAsk('What government schemes are related to this department?')">Schemes</button>
+            <button onclick="quickAsk('What latest information should I verify?')">Latest updates</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="composer-wrap">
+      <div class="composer">
+        <textarea id="messageInput" rows="1" placeholder="Ask a government-related question..."></textarea>
+        <button id="sendButton" onclick="sendMessage()">➤</button>
+      </div>
+      <div class="composer-note">AI answers should be verified with the relevant official government source for current/legal/financial details.</div>
+    </footer>
+  </main>
+</div>
+
+<div id="updatesModal" class="modal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('updatesModal')">×</button>
+    <div class="mini-label">LATEST UPDATE CENTER</div>
+    <h2>Government Information Updates</h2>
+    <div id="updatesList"></div>
+  </div>
+</div>
+
+<div id="aboutModal" class="modal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+    <div class="mini-label">ABOUT</div>
+    <h2>GovConnect AI</h2>
+    <p>This software helps citizens discover and understand government information through a department-based AI chat interface.</p>
+    <p><b>Important:</b> It is not an official government portal. Current scheme details, deadlines and government orders should be checked on official sources.</p>
+  </div>
+</div>
+
+<script>
+window.DEPARTMENTS = {{ departments|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
